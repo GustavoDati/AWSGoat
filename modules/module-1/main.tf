@@ -3389,7 +3389,7 @@ resource "aws_s3_bucket_acl" "bucket_temp" {
 }
 
 /* Uploading all files to ec2-temp-bucket-ACCOUNT_ID bucket */
-resource "aws_s3_bucket_object" "upload_temp_object" {
+resource "aws_s3_object" "upload_temp_object" {
   for_each     = fileset("./resources/s3/webfiles/build/", "**")
   acl          = "public-read"
   bucket       = aws_s3_bucket.bucket_temp.bucket

@@ -17,7 +17,7 @@ data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "resources/lambda/react"
   output_path = "resources/lambda/out/reactapp.zip"
-  depends_on  = [aws_s3_bucket_object.upload_folder_prod]
+  depends_on  = [aws_s3_object.upload_folder_prod]
 }
 
 resource "aws_lambda_function" "react_lambda_app" {

@@ -3351,6 +3351,17 @@ resource "aws_s3_object" "upload_folder_dev_2" {
 resource "random_string" "bucket_suffix" {
   length  = 8
   special = false
+  upper   = false
+}
+
+resource "aws_s3_bucket" "bucket_temp" {
+  bucket        = "ec2-temp-bucket-${random_string.bucket_suffix.result}"
+  force_destroy = true
+
+  tags = {
+    Name        = "Temporary bucket"
+    Environment = "Dev"
+  }
 }
 
 resource "aws_s3_bucket" "bucket_temp" {

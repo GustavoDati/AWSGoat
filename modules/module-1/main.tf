@@ -3364,16 +3364,6 @@ resource "aws_s3_bucket" "bucket_temp" {
   }
 }
 
-resource "aws_s3_bucket" "bucket_temp" {
-  bucket        = "ec2-temp-bucket-${random_string.bucket_suffix.result}"
-  force_destroy = true
-
-  tags = {
-    Name        = "Temporary bucket"
-    Environment = "Dev"
-  }
-}
-
 # ACL fixes required for AWS S3 APR 2023 updates.
 resource "aws_s3_bucket_public_access_block" "bucket_temp" {
   bucket = aws_s3_bucket.bucket_temp.id

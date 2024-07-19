@@ -3261,7 +3261,7 @@ resource "aws_s3_bucket_cors_configuration" "bucket_upload" {
   }
 }
 # Upload in production bucket
-resource "aws_s3_bucket_object" "upload_folder_prod" {
+resource "aws_s3_object" "upload_folder_prod" {
   for_each     = fileset("./resources/s3/webfiles/", "**")
   bucket       = aws_s3_bucket.bucket_upload.bucket
   key          = each.value
@@ -3329,7 +3329,7 @@ data "aws_iam_policy_document" "allow_get_list_access" {
   }
 }
 # Upload in dev bucket
-resource "aws_s3_bucket_object" "upload_folder_dev" {
+resource "aws_s3_object" "upload_folder_dev" {
   for_each     = fileset("./resources/s3/webfiles/build/", "**")
   bucket       = aws_s3_bucket.dev.bucket
   key          = each.value
@@ -3338,7 +3338,7 @@ resource "aws_s3_bucket_object" "upload_folder_dev" {
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
   depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip]
 }
-resource "aws_s3_bucket_object" "upload_folder_dev_2" {
+resource "aws_s3_object" "upload_folder_dev_2" {
   for_each     = fileset("./resources/s3/shared/", "**")
   bucket       = aws_s3_bucket.dev.bucket
   key          = each.value
@@ -3398,7 +3398,7 @@ resource "aws_s3_object" "upload_temp_object" {
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
   depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_lambda_react]
 }
-resource "aws_s3_bucket_object" "upload_temp_object_2" {
+resource "aws_s3_object" "upload_temp_object_2" {
   for_each     = fileset("./resources/s3/shared/", "**")
   acl          = "public-read"
   bucket       = aws_s3_bucket.bucket_temp.bucket
@@ -3600,7 +3600,7 @@ resource "aws_instance" "goat_instance" {
   }
   user_data = data.template_file.goat_script.rendered
   depends_on = [
-    aws_s3_bucket_object.upload_temp_object_2
+    aws_s3_object.upload_temp_object_2
   ]
 }
 
@@ -3700,7 +3700,7 @@ EOF
     interpreter = ["/bin/bash", "-c"]
   }
   depends_on = [
-    aws_s3_bucket_object.upload_temp_object, aws_s3_bucket_object.upload_temp_object_2, aws_s3_bucket_object.upload_folder_dev, aws_s3_bucket_object.upload_folder_dev_2, aws_s3_bucket_object.upload_folder_prod
+    aws_s3_object.upload_temp_object, aws_s3_object.upload_temp_object_2, aws_s3_object.upload_folder_dev, aws_s3_object.upload_folder_dev_2, aws_s3_object.upload_folder_prod
   ]
 }
 

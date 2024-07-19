@@ -3348,17 +3348,14 @@ resource "aws_s3_object" "upload_folder_dev_2" {
   depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip]
 }
 
-
-
-/* Creating a S3 Bucket for ec2-files upload. */
-resource "aws_s3_bucket" "bucket_temp" {
-  bucket        = "ec2-temp-bucket-${random_string.bucket_suffix.result}"
-  force_destroy = true
-
 resource "random_string" "bucket_suffix" {
   length  = 8
   special = false
 }
+
+resource "aws_s3_bucket" "bucket_temp" {
+  bucket        = "ec2-temp-bucket-${random_string.bucket_suffix.result}"
+  force_destroy = true
 
   tags = {
     Name        = "Temporary bucket"

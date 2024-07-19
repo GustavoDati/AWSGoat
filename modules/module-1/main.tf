@@ -3352,8 +3352,13 @@ resource "aws_s3_object" "upload_folder_dev_2" {
 
 /* Creating a S3 Bucket for ec2-files upload. */
 resource "aws_s3_bucket" "bucket_temp" {
-  bucket        = "ec2-temp-bucket-${data.aws_caller_identity.current.account_id}"
+  bucket        = "ec2-temp-bucket-${random_string.bucket_suffix.result}"
   force_destroy = true
+
+resource "random_string" "bucket_suffix" {
+  length  = 8
+  special = false
+}
 
   tags = {
     Name        = "Temporary bucket"
